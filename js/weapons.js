@@ -1,7 +1,7 @@
 class Weapon {
     constructor(name, type, config) {
         this.name = name;
-        this.type = type; // 'pistol', 'rifle', 'shotgun', 'sniper', 'melee'
+        this.type = type;
         this.ammo = config.ammo;
         this.maxAmmo = config.maxAmmo;
         this.fireRate = config.fireRate;
@@ -30,44 +30,6 @@ class Weapon {
 
     reload() {
         this.ammo = this.maxAmmo;
-    }
-
-    createModel() {
-        const group = new THREE.Group();
-        
-        if (this.type === 'pistol') {
-            const barrel = new THREE.BoxGeometry(0.1, 0.1, 0.5);
-            const grip = new THREE.BoxGeometry(0.15, 0.25, 0.1);
-            const barrelMesh = new THREE.Mesh(barrel, new THREE.MeshStandardMaterial({ color: this.color }));
-            const gripMesh = new THREE.Mesh(grip, new THREE.MeshStandardMaterial({ color: 0x333333 }));
-            barrelMesh.position.z = 0.25;
-            gripMesh.position.y = -0.1;
-            group.add(barrelMesh, gripMesh);
-        } else if (this.type === 'rifle') {
-            const barrel = new THREE.BoxGeometry(0.08, 0.08, 1.2);
-            const stock = new THREE.BoxGeometry(0.1, 0.15, 0.4);
-            const scope = new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16);
-            const barrelMesh = new THREE.Mesh(barrel, new THREE.MeshStandardMaterial({ color: this.color }));
-            const stockMesh = new THREE.Mesh(stock, new THREE.MeshStandardMaterial({ color: 0x444444 }));
-            const scopeMesh = new THREE.Mesh(scope, new THREE.MeshStandardMaterial({ color: 0x111111 }));
-            barrelMesh.position.z = 0.4;
-            stockMesh.position.z = -0.3;
-            scopeMesh.position.y = 0.2;
-            scopeMesh.rotation.z = Math.PI / 2;
-            group.add(barrelMesh, stockMesh, scopeMesh);
-        } else if (this.type === 'shotgun') {
-            const barrel = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 16);
-            const stock = new THREE.BoxGeometry(0.12, 0.2, 0.5);
-            const barrelMesh = new THREE.Mesh(barrel, new THREE.MeshStandardMaterial({ color: this.color }));
-            const stockMesh = new THREE.Mesh(stock, new THREE.MeshStandardMaterial({ color: 0x553333 }));
-            barrelMesh.position.z = 0.3;
-            barrelMesh.rotation.x = Math.PI / 2;
-            stockMesh.position.z = -0.2;
-            group.add(barrelMesh, stockMesh);
-        }
-        
-        this.model = group;
-        return group;
     }
 }
 
@@ -134,10 +96,6 @@ class WeaponManager {
 
     getCurrentWeapon() {
         return this.weapons[this.currentWeaponIndex];
-    }
-
-    switchWeapon(index) {
-        this.equip(index);
     }
 
     nextWeapon() {

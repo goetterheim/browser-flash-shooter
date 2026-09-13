@@ -7,23 +7,15 @@ class MenuSystem {
     }
 
     setupEventListeners() {
-        // Menú Principal
         document.getElementById('btn-play').addEventListener('click', () => this.startGame());
         document.getElementById('btn-settings').addEventListener('click', () => this.openSettings());
         document.getElementById('btn-credits').addEventListener('click', () => this.openCredits());
-
-        // Menú Pausa
         document.getElementById('btn-resume').addEventListener('click', () => this.resumeGame());
         document.getElementById('btn-settings-pause').addEventListener('click', () => this.openSettings('pause'));
         document.getElementById('btn-menu-main').addEventListener('click', () => this.backToMainMenu());
-
-        // Configuración
         document.getElementById('btn-back').addEventListener('click', () => this.backFromSettings());
-
-        // Créditos
         document.getElementById('btn-credits-back').addEventListener('click', () => this.backFromCredits());
 
-        // Sliders de configuración
         document.getElementById('volume-master').addEventListener('input', (e) => {
             document.getElementById('volume-value').textContent = e.target.value + '%';
         });
@@ -40,7 +32,6 @@ class MenuSystem {
             document.body.style.filter = `brightness(${e.target.value}%)`;
         });
 
-        // Dificultad
         document.querySelectorAll('.difficulty-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
@@ -52,7 +43,6 @@ class MenuSystem {
             });
         });
 
-        // Tecla ESC para pausar
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.gameInstance && this.gameInstance.isRunning) {
                 this.pauseGame();

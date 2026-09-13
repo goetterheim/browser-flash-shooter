@@ -23,17 +23,14 @@ class Player {
         this.mouseX = x;
         this.mouseY = y;
         
-        // Calcular ángulos de rotación
         const deltaX = x - (window.innerWidth / 2);
         const deltaY = y - (window.innerHeight / 2);
         
         this.yaw -= deltaX * 0.003 * this.sensitivity;
         this.pitch -= deltaY * 0.003 * this.sensitivity;
         
-        // Limitar pitch
         this.pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.pitch));
         
-        // Aplicar rotaciones
         this.camera.rotation.order = 'YXZ';
         this.camera.rotation.y = this.yaw;
         this.camera.rotation.x = this.pitch;
@@ -51,6 +48,6 @@ class Player {
         if (this.keys['d']) this.velocity.add(right.multiplyScalar(this.speed));
 
         this.camera.position.add(this.velocity);
-        this.camera.position.y = 1.7; // Altura del jugador
+        this.camera.position.y = 1.7;
     }
 }

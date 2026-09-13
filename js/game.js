@@ -19,7 +19,6 @@ class Game {
         this.scene.background = new THREE.Color(0x1a1a1a);
         this.scene.fog = new THREE.Fog(0x1a1a1a, 150, 400);
 
-        // Sistema de dificultad
         this.difficulty = difficulty;
         this.difficultyMultipliers = {
             easy: { enemyDamage: 0.5, enemyHealth: 0.7, spawnRate: 0.5 },
@@ -27,17 +26,14 @@ class Game {
             hard: { enemyDamage: 1.5, enemyHealth: 1.5, spawnRate: 1.5 }
         };
 
-        // Inicializar sistemas
         this.player = new Player(this.camera);
         this.world = new World(this.scene);
         this.weaponManager = new WeaponManager();
         
-        // Listas de objetos
         this.npcs = [];
         this.projectiles = [];
         this.npcProjectiles = [];
         
-        // Estadísticas del juego
         this.score = 0;
         this.playerHealth = 100;
         this.playerMaxHealth = 100;
@@ -73,7 +69,6 @@ class Game {
         directionalLight.shadow.bias = -0.001;
         this.scene.add(directionalLight);
 
-        // Luz ambiental cálida para atmósfera post-apocalíptica
         const hemisphereLight = new THREE.HemisphereLight(0xffcc99, 0x664422, 0.4);
         this.scene.add(hemisphereLight);
     }
@@ -91,15 +86,12 @@ class Game {
 
         document.addEventListener('keydown', (e) => {
             this.player.handleKeyDown(e.key);
-            // Cambiar armas con números
             const num = parseInt(e.key);
             if (num >= 1 && num <= 4) {
                 this.weaponManager.equip(num - 1);
             }
-            // Cambiar con E/Q
             if (e.key === 'e' || e.key === 'E') this.weaponManager.nextWeapon();
             if (e.key === 'q' || e.key === 'Q') this.weaponManager.previousWeapon();
-            // Recargar con R
             if (e.key === 'r' || e.key === 'R') this.weaponManager.reload();
         });
 
@@ -119,7 +111,6 @@ class Game {
             for (let i = 0; i < projectileCount; i++) {
                 const direction = this.camera.getWorldDirection(new THREE.Vector3());
                 
-                // Aplicar spread según el tipo de arma
                 if (weapon.type === 'shotgun') {
                     direction.x += (Math.random() - 0.5) * weapon.spread;
                     direction.y += (Math.random() - 0.5) * weapon.spread;
@@ -166,42 +157,24 @@ class Game {
     }
 
     updateHUD() {
-        // Salud
         const healthPercent = Math.max(0, this.playerHealth / this.playerMaxHealth) * 100;
         document.getElementById('health-bar').style.width = healthPercent + '%';
         document.getElementById('health').querySelector('.hud-value').textContent = 
             `${Math.max(0, this.playerHealth)}/100`;
 
-        // Radiación (simulada)
         const radiationPercent = Math.max(0, (this.wave - 1) * 10) % 100;
         document.getElementById('radiation-bar').style.width = radiationPercent + '%';
         document.getElementById('radiation').querySelector('.hud-value').textContent = radiationPercent + '%';
 
-        // Munición
         const weapon = this.weaponManager.getCurrentWeapon();
         document.getElementById('ammo').innerHTML = 
             `<span class="ammo-value">${weapon.ammo}</span><span class="ammo-label">/ ${weapon.maxAmmo}</span>`;
 
-        // Puntuación y oleada
         document.getElementById('score').querySelector('.hud-value').textContent = this.score;
         document.getElementById('wave').querySelector('.hud-value').textContent = this.wave;
-
-        // Nombre del arma
-        if (!document.getElementById('weapon-name')) {
-            const weaponDisplay = document.createElement('div');
-            weaponDisplay.className = 'weapon-display';
-            weaponDisplay.innerHTML = `
-                <div class="weapon-name" id="weapon-name">${weapon.name}</div>
-                <div class="weapon-status">LISTO</div>
-            `;
-            document.getElementById('hud').appendChild(weaponDisplay);
-        } else {
-            document.getElementById('weapon-name').textContent = weapon.name;
-        }
     }
 
     checkCollisions() {
-        // Colisiones proyectil jugador - enemigo
         for (let i = this.projectiles.length - 1; i >= 0; i--) {
             const projectile = this.projectiles[i];
             
@@ -216,7 +189,6 @@ class Game {
                         this.score += Math.floor(25 * (1 + this.wave * 0.2));
                         this.enemiesKilledInWave++;
                         
-                        // Verificar oleada completa
                         if (this.enemiesKilledInWave >= Math.floor(this.waveSize * (1 + this.wave * 0.3))) {
                             this.nextWave();
                         }
@@ -229,7 +201,6 @@ class Game {
             }
         }
 
-        // Colisiones proyectil enemigo - jugador
         for (let i = this.npcProjectiles.length - 1; i >= 0; i--) {
             const projectile = this.npcProjectiles[i];
             const distance = projectile.mesh.position.distanceTo(this.camera.position);
@@ -246,7 +217,6 @@ class Game {
             }
         }
 
-        // Remover proyectiles fuera de rango
         for (let i = this.projectiles.length - 1; i >= 0; i--) {
             if (!this.projectiles[i].isAlive()) {
                 this.scene.remove(this.projectiles[i].mesh);
@@ -261,7 +231,6 @@ class Game {
             }
         }
 
-        // Remover NPCs muertos después de tiempo
         for (let i = this.npcs.length - 1; i >= 0; i--) {
             if (this.npcs[i].state === 'dead' && this.npcs[i].deathTime && Date.now() - this.npcs[i].deathTime > 3000) {
                 this.scene.remove(this.npcs[i].mesh);
@@ -291,12 +260,10 @@ class Game {
         
         this.player.update();
         
-        // Actualizar NPCs
         this.npcs.forEach(npc => {
             npc.update(this.camera.position);
         });
         
-        // Actualizar proyectiles
         this.projectiles.forEach(p => p.update());
         this.npcProjectiles.forEach(p => p.update());
         

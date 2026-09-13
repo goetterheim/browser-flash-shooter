@@ -19,14 +19,6 @@ class Projectile {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.copy(position);
         this.mesh.castShadow = true;
-        
-        // Traza de luz
-        const trailGeometry = new THREE.BufferGeometry();
-        const trailPositions = [position.x, position.y, position.z, position.x, position.y, position.z];
-        trailGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(trailPositions), 3));
-        
-        const trailMaterial = new THREE.LineBasicMaterial({ color: 0xffff00, opacity: 0.5, transparent: true });
-        this.trail = new THREE.Line(trailGeometry, trailMaterial);
     }
 
     update() {
@@ -36,5 +28,29 @@ class Projectile {
     isAlive() {
         const distance = this.mesh.position.distanceTo(this.startPosition);
         return distance < this.range && (Date.now() - this.createdTime) < this.lifetime * 1000;
+    }
+}
+
+class NPCProjectile {
+    constructor(position, direction, damage) {
+        this.damage = damage;
+        const geometry = new THREE.SphereGeometry(0.15, 8, 8);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0xff4400,
+            emissive: 0xff4400,
+            roughness: 0.2
+        });
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.position.copy(position);
+        this.mesh.castShadow = true;
+        this.direction = direction;
+        this.speed = 0.6;
+        this.lifetime = 5000;
+        this.createdTime = Date.now();
+    }
+
+    update() {
+        this.mesh.position.add(this.direction.clone().multiplyScalar(this.speed));
+        return Date.now() - this.createdTime < this.lifetime;
     }
 }
