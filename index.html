@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Shooter - Post-Apocalyptic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- MENU PRINCIPAL -->
+    <div id="menu-container" class="menu-active">
+        <div class="scanlines"></div>
+        <div class="menu-content">
+            <div class="menu-header">
+                <h1 class="menu-title">WASTELAND ASSAULT</h1>
+                <div class="menu-subtitle">POST-APOCALYPTIC SHOOTER</div>
+                <div class="menu-version">v1.0 - VAULT-TEC</div>
+            </div>
+
+            <nav class="menu-nav">
+                <button class="menu-btn" id="btn-play">
+                    <span class="menu-icon">▶</span> INICIAR JUEGO
+                </button>
+                <button class="menu-btn" id="btn-settings">
+                    <span class="menu-icon">⚙</span> CONFIGURACIÓN
+                </button>
+                <button class="menu-btn" id="btn-credits">
+                    <span class="menu-icon">📜</span> CRÉDITOS
+                </button>
+            </nav>
+
+            <div class="menu-stats">
+                <div class="stat-item">
+                    <span class="stat-label">DIFICULTAD:</span>
+                    <span class="stat-value">NORMAL</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">MUNICIÓN:</span>
+                    <span class="stat-value">INFINITA</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">ESTADO:</span>
+                    <span class="stat-value">LISTO</span>
+                </div>
+            </div>
+
+            <div class="menu-footer">
+                <p>⚡ RADIACIÓN DETECTADA - MANTENER DISTANCIA ⚡</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENU DE PAUSA -->
+    <div id="pause-menu" class="menu-hidden">
+        <div class="scanlines"></div>
+        <div class="menu-content">
+            <div class="menu-header">
+                <h1 class="menu-title">JUEGO EN PAUSA</h1>
+                <div class="menu-subtitle">SISTEMA SUSPENDIDO</div>
+            </div>
+
+            <nav class="menu-nav">
+                <button class="menu-btn" id="btn-resume">
+                    <span class="menu-icon">▶</span> REANUDAR
+                </button>
+                <button class="menu-btn" id="btn-settings-pause">
+                    <span class="menu-icon">⚙</span> CONFIGURACIÓN
+                </button>
+                <button class="menu-btn" id="btn-menu-main">
+                    <span class="menu-icon">🏠</span> MENÚ PRINCIPAL
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- MENÚ DE CONFIGURACIÓN -->
+    <div id="settings-menu" class="menu-hidden">
+        <div class="scanlines"></div>
+        <div class="menu-content">
+            <div class="menu-header">
+                <h1 class="menu-title">CONFIGURACIÓN DEL SISTEMA</h1>
+            </div>
+
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label class="setting-label">VOLUMEN MAESTRO:</label>
+                    <input type="range" class="setting-slider" id="volume-master" min="0" max="100" value="100">
+                    <span class="setting-value" id="volume-value">100%</span>
+                </div>
+
+                <div class="setting-item">
+                    <label class="setting-label">SENSIBILIDAD MOUSE:</label>
+                    <input type="range" class="setting-slider" id="mouse-sensitivity" min="1" max="10" value="5">
+                    <span class="setting-value" id="sensitivity-value">5</span>
+                </div>
+
+                <div class="setting-item">
+                    <label class="setting-label">BRILLO DE PANTALLA:</label>
+                    <input type="range" class="setting-slider" id="screen-brightness" min="30" max="150" value="100">
+                    <span class="setting-value" id="brightness-value">100%</span>
+                </div>
+
+                <div class="setting-item">
+                    <label class="setting-label">DIFICULTAD:</label>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn" data-difficulty="easy">FÁCIL</button>
+                        <button class="difficulty-btn active" data-difficulty="normal">NORMAL</button>
+                        <button class="difficulty-btn" data-difficulty="hard">DIFÍCIL</button>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="menu-nav">
+                <button class="menu-btn" id="btn-back">
+                    <span class="menu-icon">◀</span> VOLVER
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- MENÚ DE CRÉDITOS -->
+    <div id="credits-menu" class="menu-hidden">
+        <div class="scanlines"></div>
+        <div class="menu-content">
+            <div class="menu-header">
+                <h1 class="menu-title">CRÉDITOS</h1>
+            </div>
+
+            <div class="credits-scroll">
+                <div class="credit-section">
+                    <h3>DESARROLLO</h3>
+                    <p>Goetterheim Studios</p>
+                </div>
+                <div class="credit-section">
+                    <h3>MOTOR GRÁFICO</h3>
+                    <p>Three.js - WebGL Renderer</p>
+                </div>
+                <div class="credit-section">
+                    <h3>MÚSICA & SONIDOS</h3>
+                    <p>Ambient Post-Apocalyptic Collection</p>
+                </div>
+                <div class="credit-section">
+                    <h3>DISEÑO</h3>
+                    <p>Inspirado en Fallout Universe</p>
+                </div>
+                <div class="credit-section">
+                    <h3>AGRADECIMIENTOS</h3>
+                    <p>A todos los sobrevivientes de la radiación</p>
+                </div>
+            </div>
+
+            <nav class="menu-nav">
+                <button class="menu-btn" id="btn-credits-back">
+                    <span class="menu-icon">◀</span> VOLVER
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- JUEGO -->
+    <div id="game-container" class="hidden">
+        <div id="canvas-container"></div>
+        
+        <div id="hud">
+            <div class="hud-left">
+                <div id="health" class="hud-item">
+                    <span class="hud-label">SALUD</span>
+                    <div class="hud-bar">
+                        <div class="hud-bar-fill" id="health-bar"></div>
+                    </div>
+                    <span class="hud-value">100/100</span>
+                </div>
+                <div id="radiation" class="hud-item">
+                    <span class="hud-label">RADIACIÓN</span>
+                    <div class="hud-bar">
+                        <div class="hud-bar-fill" id="radiation-bar"></div>
+                    </div>
+                    <span class="hud-value">0%</span>
+                </div>
+            </div>
+
+            <div class="hud-center">
+                <div id="ammo" class="hud-ammo">
+                    <span class="ammo-value">30</span>
+                    <span class="ammo-label">/ 120</span>
+                </div>
+            </div>
+
+            <div class="hud-right">
+                <div id="score" class="hud-item">
+                    <span class="hud-label">PUNTUACIÓN</span>
+                    <span class="hud-value">0</span>
+                </div>
+                <div id="wave" class="hud-item">
+                    <span class="hud-label">OLEADA</span>
+                    <span class="hud-value">1</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="crosshair"></div>
+
+        <div id="pause-hint" class="hint">Presiona ESC para pausar</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/projectile.js"></script>
+    <script src="js/world.js"></script>
+</body>
+</html>
